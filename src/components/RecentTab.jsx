@@ -1,10 +1,4 @@
 import React from 'react';
-import {
-  DxcCard,
-  DxcChip,
-  DxcBadge,
-  DxcButton
-} from '@dxc-technology/halstack-react';
 import { format } from 'date-fns';
 import './RecentTab.css';
 
@@ -33,27 +27,24 @@ const RecentTab = ({ recentItems }) => {
       <div className="section-header">
         <div className="title-section">
           <h2 className="section-title">Recent Activity</h2>
-          <DxcChip
-            label={`${recentItems.length}`}
-            color="info"
-          />
+          <span className="chip chip-info">{recentItems.length}</span>
         </div>
       </div>
 
       <div className="recent-list">
         {recentItems.length > 0 ? (
           recentItems.map((item, index) => (
-            <DxcCard key={index} className="recent-item-card">
+            <div key={index} className="recent-item-card card">
               <div className="recent-item-content">
                 <div className="item-icon">
                   <i className={`fas fa-${getItemIcon(item.type)}`}></i>
                 </div>
-                
+
                 <div className="item-details">
                   <h4 className="item-title">{item.title || item.name}</h4>
                   <div className="item-meta">
                     <span className="item-type">
-                      <DxcBadge label={item.type} size="small" />
+                      <span className="badge badge-small">{item.type}</span>
                     </span>
                     <span className="item-date">
                       <i className="fas fa-clock"></i> {formatDate(item.sys_updated_on)}
@@ -62,15 +53,12 @@ const RecentTab = ({ recentItems }) => {
                 </div>
 
                 <div className="item-actions">
-                  <DxcButton
-                    label="Open"
-                    size="small"
-                    mode="text"
-                    icon="external-link-alt"
-                  />
+                  <button className="btn btn-text btn-small">
+                    <i className="fas fa-external-link-alt"></i> Open
+                  </button>
                 </div>
               </div>
-            </DxcCard>
+            </div>
           ))
         ) : (
           <div className="no-data">

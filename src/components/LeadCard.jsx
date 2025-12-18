@@ -1,12 +1,11 @@
 import React from 'react';
-import { DxcCard, DxcButton, DxcChip, DxcBadge } from '@dxc-technology/halstack-react';
 import './LeadCard.css';
 
 const LeadCard = ({ lead, onClick }) => {
   const getStageProgress = (stage) => {
     const stages = ['New', 'Contacted', 'Nurturing', 'Qualified', 'Disqualified'];
     const currentIndex = stages.indexOf(stage);
-    
+
     return stages.map((s, index) => ({
       name: s,
       icon: getStageIcon(s),
@@ -28,21 +27,21 @@ const LeadCard = ({ lead, onClick }) => {
 
   const getRatingColor = (rating) => {
     switch (rating) {
-      case 'Hot': return 'error';
-      case 'Warm': return 'warning';
-      case 'Cold': return 'info';
-      case 'Super Hot': return 'error';
-      default: return 'default';
+      case 'Hot': return 'chip-error';
+      case 'Warm': return 'chip-warning';
+      case 'Cold': return 'chip-info';
+      case 'Super Hot': return 'chip-error';
+      default: return 'chip-default';
     }
   };
 
   const stageProgress = getStageProgress(lead.stage);
 
   return (
-    <DxcCard className="lead-card">
+    <div className="lead-card card">
       <div className="card-header">
-        <DxcBadge label={lead.number} color="grey" />
-        <DxcChip label={lead.lead_type} size="small" />
+        <span className="badge badge-grey">{lead.number}</span>
+        <span className="chip chip-small">{lead.lead_type}</span>
       </div>
 
       <div className="card-body">
@@ -56,11 +55,9 @@ const LeadCard = ({ lead, onClick }) => {
             <span>{lead.company}</span>
           </div>
           {lead.lead_rating && (
-            <DxcChip
-              label={lead.lead_rating}
-              color={getRatingColor(lead.lead_rating)}
-              size="small"
-            />
+            <span className={`chip chip-small ${getRatingColor(lead.lead_rating)}`}>
+              {lead.lead_rating}
+            </span>
           )}
         </div>
 
@@ -81,13 +78,9 @@ const LeadCard = ({ lead, onClick }) => {
       </div>
 
       <div className="card-footer">
-        <DxcButton
-          label="View"
-          icon="clipboard"
-          size="small"
-          mode="primary"
-          onClick={onClick}
-        />
+        <button className="btn btn-primary btn-small" onClick={onClick}>
+          <i className="fas fa-clipboard"></i> View
+        </button>
       </div>
 
       {/* Stage Progress Bar */}
@@ -104,7 +97,7 @@ const LeadCard = ({ lead, onClick }) => {
           </div>
         ))}
       </div>
-    </DxcCard>
+    </div>
   );
 };
 

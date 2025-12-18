@@ -1,5 +1,4 @@
 import React from 'react';
-import { DxcCard } from '@dxc-technology/halstack-react';
 import './DashboardCards.css';
 
 const DashboardCards = ({ stats, activeTab, onTabChange, darkMode }) => {

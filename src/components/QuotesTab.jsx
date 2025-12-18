@@ -1,11 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import {
-  DxcButton,
-  DxcPaginator,
-  DxcChip,
-  DxcCard,
-  DxcBadge
-} from '@dxc-technology/halstack-react';
 import { format } from 'date-fns';
 import './QuotesTab.css';
 
@@ -22,11 +15,11 @@ const QuotesTab = ({ quotes, onRefresh }) => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Approved': return 'success';
-      case 'Pending': return 'warning';
-      case 'Rejected': return 'error';
-      case 'Draft': return 'info';
-      default: return 'default';
+      case 'Approved': return 'chip-success';
+      case 'Pending': return 'chip-warning';
+      case 'Rejected': return 'chip-error';
+      case 'Draft': return 'chip-info';
+      default: return 'chip-default';
     }
   };
 
@@ -44,24 +37,19 @@ const QuotesTab = ({ quotes, onRefresh }) => {
       <div className="section-header">
         <div className="title-section">
           <h2 className="section-title">All Quotes</h2>
-          <DxcChip
-            label={`${quotes.length}`}
-            color="info"
-          />
+          <span className="chip chip-info">{quotes.length}</span>
         </div>
       </div>
 
       <div className="quotes-grid">
         {paginatedQuotes.length > 0 ? (
           paginatedQuotes.map((quote) => (
-            <DxcCard key={quote.sys_id} className="quote-card">
+            <div key={quote.sys_id} className="quote-card card">
               <div className="card-header">
-                <DxcBadge label={quote.number} color="grey" />
-                <DxcChip
-                  label={quote.status}
-                  color={getStatusColor(quote.status)}
-                  size="small"
-                />
+                <span className="badge badge-grey">{quote.number}</span>
+                <span className={`chip chip-small ${getStatusColor(quote.status)}`}>
+                  {quote.status}
+                </span>
               </div>
 
               <div className="card-body">
@@ -82,14 +70,11 @@ const QuotesTab = ({ quotes, onRefresh }) => {
               </div>
 
               <div className="card-footer">
-                <DxcButton
-                  label="View Details"
-                  icon="clipboard"
-                  size="small"
-                  mode="primary"
-                />
+                <button className="btn btn-primary btn-small">
+                  <i className="fas fa-clipboard"></i> View Details
+                </button>
               </div>
-            </DxcCard>
+            </div>
           ))
         ) : (
           <div className="no-data">
@@ -101,12 +86,25 @@ const QuotesTab = ({ quotes, onRefresh }) => {
 
       {totalPages > 1 && (
         <div className="pagination-wrapper">
-          <DxcPaginator
-            currentPage={currentPage}
-            itemsPerPage={pageSize}
-            totalItems={quotes.length}
-            onPageChange={setCurrentPage}
-          />
+          <div className="paginator">
+            <button
+              className="page-btn"
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <i className="fas fa-chevron-left"></i>
+            </button>
+            <span className="page-info">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="page-btn"
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              <i className="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       )}
     </div>

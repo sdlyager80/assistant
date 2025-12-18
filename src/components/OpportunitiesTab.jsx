@@ -1,13 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import {
-  DxcButton,
-  DxcDropdown,
-  DxcPaginator,
-  DxcChip,
-  DxcCard,
-  DxcBadge,
-  DxcFlex
-} from '@dxc-technology/halstack-react';
 import './OpportunitiesTab.css';
 
 const OpportunitiesTab = ({ opportunities, onRefresh }) => {
@@ -39,7 +30,7 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
   const getStageProgress = (stage) => {
     const stages = ['Qualify', 'Develop', 'Propose', 'Negotiate', 'Closed'];
     const currentIndex = stages.indexOf(stage);
-    
+
     return stages.map((s, index) => ({
       name: s,
       icon: getStageIcon(s),
@@ -61,10 +52,10 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
 
   const getRatingColor = (rating) => {
     switch (rating) {
-      case 'High': return 'error';
-      case 'Medium': return 'warning';
-      case 'Low': return 'info';
-      default: return 'default';
+      case 'High': return 'chip-error';
+      case 'Medium': return 'chip-warning';
+      case 'Low': return 'chip-info';
+      default: return 'chip-default';
     }
   };
 
@@ -73,22 +64,28 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
       <div className="section-header">
         <div className="title-section">
           <h2 className="section-title">All Opportunities</h2>
-          <DxcChip
-            label={`${filteredOpportunities.length}`}
-            color="info"
-          />
+          <span className="chip chip-info">{filteredOpportunities.length}</span>
         </div>
-        
+
         <div className="filter-section">
-          <DxcDropdown
-            label="Filter by Stage"
-            options={stages}
-            onSelectOption={(value) => {
-              setSelectedStage(value);
+          <label htmlFor="stage-filter">
+            <i className="fas fa-filter"></i> Filter by Stage
+          </label>
+          <select
+            id="stage-filter"
+            className="dropdown"
+            value={selectedStage}
+            onChange={(e) => {
+              setSelectedStage(e.target.value);
               setCurrentPage(1);
             }}
-            icon="filter"
-          />
+          >
+            {stages.map((stage) => (
+              <option key={stage.value} value={stage.value}>
+                {stage.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -96,12 +93,12 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
         {paginatedOpportunities.length > 0 ? (
           paginatedOpportunities.map((opp) => {
             const stageProgress = getStageProgress(opp.stage);
-            
+
             return (
-              <DxcCard key={opp.sys_id} className="opportunity-card">
+              <div key={opp.sys_id} className="opportunity-card card">
                 <div className="card-header">
-                  <DxcBadge label={opp.number} color="grey" />
-                  <DxcChip label={opp.sales_cycle_type} size="small" />
+                  <span className="badge badge-grey">{opp.number}</span>
+                  <span className="chip chip-small">{opp.sales_cycle_type}</span>
                 </div>
 
                 <div className="card-body">
@@ -114,11 +111,9 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
                       <span>{opp.short_description}</span>
                     </div>
                     {opp.rating && (
-                      <DxcChip
-                        label={opp.rating}
-                        color={getRatingColor(opp.rating)}
-                        size="small"
-                      />
+                      <span className={`chip chip-small ${getRatingColor(opp.rating)}`}>
+                        {opp.rating}
+                      </span>
                     )}
                   </div>
 
@@ -135,12 +130,9 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
                 </div>
 
                 <div className="card-footer">
-                  <DxcButton
-                    label="View"
-                    icon="clipboard"
-                    size="small"
-                    mode="primary"
-                  />
+                  <button className="btn btn-primary btn-small">
+                    <i className="fas fa-clipboard"></i> View
+                  </button>
                 </div>
 
                 {/* Stage Progress Bar */}
@@ -157,7 +149,7 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
                     </div>
                   ))}
                 </div>
-              </DxcCard>
+              </div>
             );
           })
         ) : (
@@ -170,12 +162,25 @@ const OpportunitiesTab = ({ opportunities, onRefresh }) => {
 
       {totalPages > 1 && (
         <div className="pagination-wrapper">
-          <DxcPaginator
-            currentPage={currentPage}
-            itemsPerPage={pageSize}
-            totalItems={filteredOpportunities.length}
-            onPageChange={setCurrentPage}
-          />
+          <div className="paginator">
+            <button
+              className="page-btn"
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <i className="fas fa-chevron-left"></i>
+            </button>
+            <span className="page-info">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="page-btn"
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              <i className="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       )}
     </div>

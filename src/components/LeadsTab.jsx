@@ -1,17 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import {
-  DxcButton,
-  DxcDropdown,
-  DxcPaginator,
-  DxcChip
-} from '@dxc-technology/halstack-react';
 import LeadCard from './LeadCard';
 import LeadModal from './LeadModal';
 import './LeadsTab.css';
 
 const LeadsTab = ({ leads, onRefresh }) => {
   const [selectedStage, setSelectedStage] = useState('All');
-  const [showStageDropdown, setShowStageDropdown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedLead, setSelectedLead] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +27,6 @@ const LeadsTab = ({ leads, onRefresh }) => {
   const handleFilterChange = (stage) => {
     setSelectedStage(stage);
     setCurrentPage(1);
-    setShowStageDropdown(false);
   };
 
   const handleLeadClick = (lead) => {
@@ -57,29 +49,34 @@ const LeadsTab = ({ leads, onRefresh }) => {
     }
   };
 
-  const stageOptions = stages.map(stage => ({
-    label: stage,
-    value: stage
-  }));
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="leads-tab">
       <div className="section-header">
         <div className="title-section">
           <h2 className="section-title">All Leads</h2>
-          <DxcChip
-            label={`${filteredLeads.length}`}
-            color="info"
-          />
+          <span className="chip chip-info">{filteredLeads.length}</span>
         </div>
-        
+
         <div className="filter-section">
-          <DxcDropdown
-            label="Filter by Stage"
-            options={stageOptions}
-            onSelectOption={(value) => handleFilterChange(value)}
-            icon="filter"
-          />
+          <label htmlFor="stage-filter">
+            <i className="fas fa-filter"></i> Filter by Stage
+          </label>
+          <select
+            id="stage-filter"
+            className="dropdown"
+            value={selectedStage}
+            onChange={(e) => handleFilterChange(e.target.value)}
+          >
+            {stages.map((stage) => (
+              <option key={stage} value={stage}>
+                {stage}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -102,12 +99,25 @@ const LeadsTab = ({ leads, onRefresh }) => {
 
       {totalPages > 1 && (
         <div className="pagination-wrapper">
-          <DxcPaginator
-            currentPage={currentPage}
-            itemsPerPage={pageSize}
-            totalItems={filteredLeads.length}
-            onPageChange={setCurrentPage}
-          />
+          <div className="paginator">
+            <button
+              className="page-btn"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <i className="fas fa-chevron-left"></i>
+            </button>
+            <span className="page-info">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="page-btn"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              <i className="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       )}
 

@@ -1,12 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {
-  DxcApplicationLayout,
-  DxcHeader,
-  DxcTabs,
-  DxcInset,
-  ThemeProvider,
-  DxcSpinner
-} from '@dxc-technology/halstack-react';
 import LeadsTab from './components/LeadsTab';
 import OpportunitiesTab from './components/OpportunitiesTab';
 import QuotesTab from './components/QuotesTab';
@@ -163,7 +155,10 @@ function App() {
     if (loading) {
       return (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}>
-          <DxcSpinner label="Loading..." mode="large" />
+          <div className="spinner">
+            <i className="fas fa-spinner fa-spin" style={{ fontSize: '3rem', color: '#1B75BB' }}></i>
+            <p style={{ marginTop: '1rem' }}>Loading...</p>
+          </div>
         </div>
       );
     }
@@ -183,65 +178,56 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={darkMode ? 'dark' : 'light'}>
-      <DxcApplicationLayout>
-        <DxcApplicationLayout.Header>
-          <DxcHeader
-            content={
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>
-                  Advisor Assistant
-                </h1>
-              </div>
-            }
-            underlined
+    <div className={`app-container ${darkMode ? 'dark-mode' : ''}`}>
+      <header className="app-header">
+        <div className="header-content">
+          <h1 className="app-title">Advisor Assistant</h1>
+        </div>
+      </header>
+
+      <main className="app-main">
+        <div className="app-inset">
+          {/* Dashboard Cards */}
+          <DashboardCards
+            stats={stats}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            darkMode={darkMode}
           />
-        </DxcApplicationLayout.Header>
 
-        <DxcApplicationLayout.Main>
-          <DxcInset space="2rem">
-            {/* Dashboard Cards */}
-            <DashboardCards
-              stats={stats}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              darkMode={darkMode}
+          {/* Tabs */}
+          <div className="tabs-container">
+            <div className="tabs">
+              {tabs.map((tab, index) => (
+                <button
+                  key={index}
+                  className={`tab ${activeTab === index ? 'active' : ''}`}
+                  onClick={() => setActiveTab(index)}
+                >
+                  <i className={`fas fa-${tab.icon}`}></i>
+                  <span>{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tab Content */}
+          <div className="tab-content">
+            {renderTabContent()}
+          </div>
+
+          {/* Powered By Footer */}
+          <div className="app-footer">
+            <div className="footer-text">Powered by</div>
+            <img
+              src={dxcLogo}
+              alt="DXC Technology"
+              className="footer-logo"
             />
-
-            {/* Tabs */}
-            <div style={{ marginTop: '2rem' }}>
-              <DxcTabs
-                tabs={tabs}
-                activeTabIndex={activeTab}
-                onTabClick={setActiveTab}
-              />
-            </div>
-
-            {/* Tab Content */}
-            <div style={{ marginTop: '2rem' }}>
-              {renderTabContent()}
-            </div>
-
-            {/* Powered By Footer */}
-            <div style={{ 
-              marginTop: '3rem', 
-              textAlign: 'center',
-              padding: '1.5rem',
-              borderTop: '1px solid #e0e0e0'
-            }}>
-              <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.5rem' }}>
-                Powered by
-              </div>
-              <img 
-                src={dxcLogo} 
-                alt="DXC Technology" 
-                style={{ height: '40px', opacity: 0.8 }}
-              />
-            </div>
-          </DxcInset>
-        </DxcApplicationLayout.Main>
-      </DxcApplicationLayout>
-    </ThemeProvider>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
 

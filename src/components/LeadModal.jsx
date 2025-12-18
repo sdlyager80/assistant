@@ -1,13 +1,4 @@
 import React, { useState } from 'react';
-import {
-  DxcDialog,
-  DxcButton,
-  DxcTextInput,
-  DxcSelect,
-  DxcInset,
-  DxcFlex,
-  DxcHeading
-} from '@dxc-technology/halstack-react';
 import './LeadModal.css';
 
 const LeadModal = ({ lead, onClose, onSave }) => {
@@ -34,141 +25,168 @@ const LeadModal = ({ lead, onClose, onSave }) => {
   };
 
   return (
-    <DxcDialog
-      isVisible={true}
-      onBackgroundClick={onClose}
-      overlay={true}
-    >
-      <div className="lead-modal-content">
-        <div className="modal-header">
-          <DxcHeading level={3} text={`Lead: ${lead.number}`} />
-          <DxcButton
-            icon="close"
-            mode="text"
-            onClick={onClose}
-            size="small"
-          />
-        </div>
+    <>
+      <div className="modal-overlay" onClick={onClose}></div>
+      <div className="modal-dialog">
+        <div className="lead-modal-content">
+          <div className="modal-header">
+            <h3>Lead: {lead.number}</h3>
+            <button className="btn-icon" onClick={onClose}>
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
 
-        <DxcInset space="1.5rem">
-          <DxcFlex direction="column" gap="1.5rem">
+          <div className="modal-body">
             {/* Personal Information */}
-            <div>
-              <DxcHeading level={4} text="Personal Information" />
-              <DxcFlex direction="column" gap="1rem" style={{ marginTop: '1rem' }}>
-                <DxcFlex gap="1rem">
-                  <DxcTextInput
-                    label="First Name"
+            <div className="form-section">
+              <h4>Personal Information</h4>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label htmlFor="first_name">First Name</label>
+                  <input
+                    id="first_name"
+                    type="text"
+                    className="form-input"
                     value={formData.first_name || ''}
-                    onChange={(value) => handleChange('first_name', value)}
+                    onChange={(e) => handleChange('first_name', e.target.value)}
                     disabled={!isEditing}
                   />
-                  <DxcTextInput
-                    label="Last Name"
+                </div>
+                <div className="form-group">
+                  <label htmlFor="last_name">Last Name</label>
+                  <input
+                    id="last_name"
+                    type="text"
+                    className="form-input"
                     value={formData.last_name || ''}
-                    onChange={(value) => handleChange('last_name', value)}
+                    onChange={(e) => handleChange('last_name', e.target.value)}
                     disabled={!isEditing}
                   />
-                </DxcFlex>
-
-                <DxcTextInput
-                  label="Email"
-                  value={formData.email || ''}
-                  onChange={(value) => handleChange('email', value)}
-                  disabled={!isEditing}
-                  type="email"
-                />
-
-                <DxcTextInput
-                  label="Business Phone"
-                  value={formData.business_phone || ''}
-                  onChange={(value) => handleChange('business_phone', value)}
-                  disabled={!isEditing}
-                  type="tel"
-                />
-
-                <DxcTextInput
-                  label="Company"
-                  value={formData.company || ''}
-                  onChange={(value) => handleChange('company', value)}
-                  disabled={!isEditing}
-                />
-              </DxcFlex>
+                </div>
+                <div className="form-group full-width">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    className="form-input"
+                    value={formData.email || ''}
+                    onChange={(e) => handleChange('email', e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="business_phone">Business Phone</label>
+                  <input
+                    id="business_phone"
+                    type="tel"
+                    className="form-input"
+                    value={formData.business_phone || ''}
+                    onChange={(e) => handleChange('business_phone', e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="company">Company</label>
+                  <input
+                    id="company"
+                    type="text"
+                    className="form-input"
+                    value={formData.company || ''}
+                    onChange={(e) => handleChange('company', e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Lead Details */}
-            <div>
-              <DxcHeading level={4} text="Lead Details" />
-              <DxcFlex direction="column" gap="1rem" style={{ marginTop: '1rem' }}>
-                <DxcSelect
-                  label="Stage"
-                  options={stages.map(s => ({ label: s, value: s }))}
-                  value={formData.stage}
-                  onChange={(value) => handleChange('stage', value)}
-                  disabled={!isEditing}
-                />
-
-                <DxcSelect
-                  label="Lead Type"
-                  options={leadTypes.map(t => ({ label: t, value: t }))}
-                  value={formData.lead_type}
-                  onChange={(value) => handleChange('lead_type', value)}
-                  disabled={!isEditing}
-                />
-
-                <DxcSelect
-                  label="Rating"
-                  options={ratings.map(r => ({ label: r, value: r }))}
-                  value={formData.lead_rating}
-                  onChange={(value) => handleChange('lead_rating', value)}
-                  disabled={!isEditing}
-                />
-
-                <DxcSelect
-                  label="Industry"
-                  options={industries.map(i => ({ label: i, value: i }))}
-                  value={formData.industry}
-                  onChange={(value) => handleChange('industry', value)}
-                  disabled={!isEditing}
-                />
-              </DxcFlex>
+            <div className="form-section">
+              <h4>Lead Details</h4>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label htmlFor="stage">Stage</label>
+                  <select
+                    id="stage"
+                    className="form-input"
+                    value={formData.stage || ''}
+                    onChange={(e) => handleChange('stage', e.target.value)}
+                    disabled={!isEditing}
+                  >
+                    {stages.map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lead_type">Lead Type</label>
+                  <select
+                    id="lead_type"
+                    className="form-input"
+                    value={formData.lead_type || ''}
+                    onChange={(e) => handleChange('lead_type', e.target.value)}
+                    disabled={!isEditing}
+                  >
+                    {leadTypes.map(t => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lead_rating">Rating</label>
+                  <select
+                    id="lead_rating"
+                    className="form-input"
+                    value={formData.lead_rating || ''}
+                    onChange={(e) => handleChange('lead_rating', e.target.value)}
+                    disabled={!isEditing}
+                  >
+                    {ratings.map(r => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="industry">Industry</label>
+                  <select
+                    id="industry"
+                    className="form-input"
+                    value={formData.industry || ''}
+                    onChange={(e) => handleChange('industry', e.target.value)}
+                    disabled={!isEditing}
+                  >
+                    {industries.map(i => (
+                      <option key={i} value={i}>{i}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
-          </DxcFlex>
-        </DxcInset>
+          </div>
 
-        <div className="modal-footer">
-          {!isEditing ? (
-            <DxcFlex gap="0.5rem">
-              <DxcButton
-                label="Edit"
-                icon="edit"
-                mode="primary"
-                onClick={() => setIsEditing(true)}
-              />
-              <DxcButton
-                label="Close"
-                mode="secondary"
-                onClick={onClose}
-              />
-            </DxcFlex>
-          ) : (
-            <DxcFlex gap="0.5rem">
-              <DxcButton
-                label="Save"
-                icon="save"
-                mode="primary"
-                onClick={handleSave}
-              />
-              <DxcButton
-                label="Cancel"
-                mode="secondary"
-                onClick={handleCancel}
-              />
-            </DxcFlex>
-          )}
+          <div className="modal-footer">
+            {!isEditing ? (
+              <div className="button-group">
+                <button className="btn btn-primary" onClick={() => setIsEditing(true)}>
+                  <i className="fas fa-edit"></i> Edit
+                </button>
+                <button className="btn btn-secondary" onClick={onClose}>
+                  Close
+                </button>
+              </div>
+            ) : (
+              <div className="button-group">
+                <button className="btn btn-primary" onClick={handleSave}>
+                  <i className="fas fa-save"></i> Save
+                </button>
+                <button className="btn btn-secondary" onClick={handleCancel}>
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </DxcDialog>
+    </>
   );
 };
 
