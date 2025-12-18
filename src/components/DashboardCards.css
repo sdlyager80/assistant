@@ -1,0 +1,135 @@
+.dashboard-cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover::before,
+.dashboard-card.active::before {
+  transform: scaleX(1);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.1);
+  color: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.dashboard-card.active .card-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.dashboard-card i {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card.active i {
+  color: white;
+  transform: scale(1.1);
+}
+
+.card-label {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Specific card colors */
+.card-leads {
+  border-left: 4px solid #4995FF;
+}
+
+.card-opportunities {
+  border-left: 4px solid #FFAE41;
+}
+
+.card-quotes {
+  border-left: 4px solid #22c55e;
+}
+
+.card-recent {
+  border-left: 4px solid #A1E6FF;
+}
+
+/* Dark Mode Support */
+.dashboard-cards-wrapper.dark-mode .dashboard-card {
+  background: #1f2937;
+  color: #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-cards-wrapper.dark-mode .dashboard-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.dashboard-cards-wrapper.dark-mode .dashboard-card i {
+  color: #60a5fa;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .dashboard-cards-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-cards-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-card {
+    padding: 1.25rem;
+  }
+}
